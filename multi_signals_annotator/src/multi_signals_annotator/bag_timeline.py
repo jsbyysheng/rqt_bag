@@ -423,7 +423,7 @@ class BagTimeline(QObject):
                 datatype = self._datatype_by_topic[topic]
                 ptr = ptr_by_topic[topic]
                 ptr_data = dataframe_by_topic[topic].iloc[ptr]
-                ptr_data['timestamp'] = t
+                ptr_data['timestamp'] = t.to_nsec()
                 ptr_data['datatype'] = datatype
                 if datatype in bag_helper.msg_map:
                     extras = dict()
@@ -451,7 +451,7 @@ class BagTimeline(QObject):
                         self.status_bar_changed_signal.emit()
 
             message_num += 1
-            
+
         try:
             self.background_progress = 0
             self.status_bar_changed_signal.emit()
@@ -532,7 +532,7 @@ class BagTimeline(QObject):
             return
         self._play_speed = min(self._max_play_speed, max(self._min_play_speed, play_speed))
         self.status_bar_changed_signal.emit()
-            
+
     play_speed = property(_get_play_speed, _set_play_speed)
 
     def navigate_play(self):
