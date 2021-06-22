@@ -49,6 +49,7 @@ import rosbag
 from .bag_helper import stamp_to_str, filesize_to_str, SLIDER_BAR_MAX
 from .bag_timeline import BagTimeline
 
+
 class BagGraphicsView(QGraphicsView):
 
     def __init__(self, parent=None):
@@ -264,10 +265,10 @@ class BagWidget(QWidget):
 
     def _handle_lineEdit_playhead_selectionChanged(self):
         self.lineEdit_playhead_status = 'select'
-    
+
     def _handle_lineEdit_playhead_cursorPositionChanged(self, old, new):
         self.lineEdit_playhead_status = 'position_changed'
-    
+
     def change_playhead_position(self, new_position):
         try:
             republish = False
@@ -327,6 +328,7 @@ class BagWidget(QWidget):
             self.last_open_dir = QFileInfo(filename).absoluteDir().absolutePath()
             self.lineEdit_bag_file_path.setText(self.last_open_dir)
             self.bagfile_name = os.path.basename(filename)[0:-4]
+            self.label_current_rosbag_file.setText(self.bagfile_name)
             self.load_bag(filename)
 
             self.label_max_timeline.setText('{:.4f}'.format(self._timeline.duration()))
@@ -378,16 +380,16 @@ class BagWidget(QWidget):
         except rosbag.ROSBagException as e:
             print("Loading '%s' failed due to: %s" % (filename.encode(errors='replace'), e))
             self.set_status_text.emit("Loading '%s' failed due to: %s" % (filename, e))
-    
+
     def _get_selected_topics(self):
         topics = self._timeline._get_topics()
         topics_selection = [
-            topics[i] 
-            for i in range(self.topicsListViewModel.rowCount()) 
+            topics[i]
+            for i in range(self.topicsListViewModel.rowCount())
             if self.topicsListViewModel.item(i).checkState() == Qt.Checked
         ]
         return topics_selection
-    
+
     def _handel_chosse_export_path(self):
         if os.path.exists(self.lineEdit_export_path.text()):
             self.last_open_saving_dir = self.lineEdit_export_path.text()
